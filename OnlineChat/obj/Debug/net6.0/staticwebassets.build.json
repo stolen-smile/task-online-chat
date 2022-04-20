@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "oaYID35tTPe077WMecwmwVQ/RoRoRc/NB5R0/QsW/jw=",
+  "Source": "OnlineChat",
+  "BasePath": "_content/OnlineChat",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "OnlineChat\\wwwroot",
+      "Source": "OnlineChat",
+      "ContentRoot": "C:\\Users\\user\\source\\repos\\OnlineChat\\OnlineChat\\wwwroot\\",
+      "BasePath": "_content/OnlineChat",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\user\\source\\repos\\OnlineChat\\OnlineChat\\wwwroot\\js\\microsoft\\signalr\\dist\\browser\\signalr.min.js",
+      "SourceId": "OnlineChat",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\user\\source\\repos\\OnlineChat\\OnlineChat\\wwwroot\\",
+      "BasePath": "_content/OnlineChat",
+      "RelativePath": "js/microsoft/signalr/dist/browser/signalr.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\microsoft\\signalr\\dist\\browser\\signalr.min.js"
+    }
+  ]
+}

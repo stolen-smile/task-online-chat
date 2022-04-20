@@ -1,9 +1,8 @@
 using OnlineChat;
 
 
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-app.Run();
+CreateHostBuilder(args).UseDefaultServiceProvider(options =>
+options.ValidateScopes = false).Build().Run();
 
 static IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)

@@ -19,6 +19,7 @@ namespace OnlineChat
                     options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
             services.AddSignalR();
+            
             services.AddControllersWithViews();
         }
 
@@ -28,17 +29,18 @@ namespace OnlineChat
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
 
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Account}/{action=Index}");
+                    pattern: "{controller=Account}/{action=Login}");
                 endpoints.MapHub<ChatHub>("/chat");
             });
         }

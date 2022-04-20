@@ -36,9 +36,7 @@ namespace OnlineChat.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users
-                    .Include(u => u.Messages)
-                    .FirstOrDefaultAsync(u => u.NickName == model.NickName);
+                User user =  _context.Users.FirstOrDefault(u => u.NickName == model.NickName);
                 if (user != null)
                 {
                     await Authenticate(user); // аутентификация
