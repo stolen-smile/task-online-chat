@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using OnlineChat.Services;
+using OnlineChat.Mock;
 
 namespace OnlineChat
 {
@@ -9,7 +11,7 @@ namespace OnlineChat
             //string connection = "Server=(localdb)\\mssqllocaldb;Database=authsignalrappdb;Trusted_Connection=True;";
             //services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
             
-            //services.AddTransient<IProductRepository, EFProductRepository>();
+            services.AddTransient<IRepository, FakeRepository>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
