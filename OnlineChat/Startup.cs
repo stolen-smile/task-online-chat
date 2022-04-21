@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using OnlineChat.Services;
 using OnlineChat.Mock;
+using Microsoft.AspNetCore.SignalR;
 
 namespace OnlineChat
 {
@@ -19,7 +20,7 @@ namespace OnlineChat
                     options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
             services.AddSignalR();
-            
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             services.AddControllersWithViews();
         }
 

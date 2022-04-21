@@ -3,7 +3,8 @@
 
 
 <div id="inputForm">
-        <input type="text" id="message" />
+        <input type="text" id="message" /><br/>
+        <input type="text" id="toUser" />
         <input type="button" id="sendBtn" value="Отправить" />
 </div>
 <div class="row">
@@ -27,6 +28,8 @@
             let userNameElem = document.createElement("b");
             userNameElem.appendChild(document.createTextNode(userName + ': '));
   
+            
+
             // создает элемент <p> для сообщения пользователя
             let elem = document.createElement("p");
             elem.appendChild(userNameElem);
@@ -41,7 +44,8 @@
         // отправка сообщения на сервер
         document.getElementById("sendBtn").addEventListener("click", function (e) {
             let message = document.getElementById("message").value;
-            hubConnection.invoke("Send", userName, message);
+            let toUser = document.getElementById("toUser").value;
+            hubConnection.invoke("Send", userName,toUser, message);
         });
  
         hubConnection.start();
