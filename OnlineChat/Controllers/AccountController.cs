@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using OnlineChat.Models.DTO;
 
 namespace OnlineChat.Controllers
 {
@@ -20,9 +21,9 @@ namespace OnlineChat.Controllers
         }
 
         
-        public IActionResult Index(User user)
+        public IActionResult Index(UserAndContactsViewModel viewModel)
         {
-            return View(user);
+            return View(viewModel);
         }
         [HttpGet]
         public IActionResult Login()
@@ -40,7 +41,18 @@ namespace OnlineChat.Controllers
                 if (user != null)
                 {
                     await Authenticate(user); // аутентификация
-                    return RedirectToAction("Index", "Account", user);// переадресация на метод Index
+                    //creat viewModel
+                    var viewModel = new UserAndContactsViewModel
+                    {
+                        NickName = user.NickName,
+                        Contacts = new List<string>()
+                    };
+                    foreach (var message in user.Messages)
+                    {
+                        viewModel.Contacts.Add(message.AddresseeUser.NickName);
+                    }
+                    //redirect to chat
+                    return RedirectToAction("Index", "Account", viewModel);// переадресация на метод Index
                 }
                 ModelState.AddModelError("", "Bad nickname");
             }

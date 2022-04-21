@@ -1,4 +1,4 @@
-﻿@model OnlineChat.Models.User
+﻿@model OnlineChat.Models.DTO.UserAndContactsViewModel;
 <h1>hello @Model.NickName</h1>
 
 
@@ -9,7 +9,10 @@
 </div>
 <div class="row">
     <div id="chats" class=" col-md-3">
-           
+        @foreach(var contacts in @Model.Contacts)
+        {
+            <p>@contacts</p>
+        }
     </div>
     <div id="chatroom" class="col-md-9">
         <h3>Chating</h3>
