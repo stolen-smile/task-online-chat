@@ -20,9 +20,9 @@ namespace OnlineChat.Controllers
         }
 
         
-        public IActionResult Index()
+        public IActionResult Index(User user)
         {
-            return View();
+            return View(user);
         }
         [HttpGet]
         public IActionResult Login()
@@ -40,7 +40,7 @@ namespace OnlineChat.Controllers
                 if (user != null)
                 {
                     await Authenticate(user); // аутентификация
-                    return RedirectToAction("Index", "Account");// переадресация на метод Index
+                    return RedirectToAction("Index", "Account", user);// переадресация на метод Index
                 }
                 ModelState.AddModelError("", "Bad nickname");
             }

@@ -9,11 +9,11 @@ namespace OnlineChat.Services
     {
         public async Task Send(string nickName, string message)
         {
-            await Clients.All.SendAsync("Receive", nickName, message);
-        }
-        public async Task Receive(string nickName, string message)
-        {
             await Clients.All.SendAsync("Send", nickName, message);
         }
+        //public async Task Receive(string nickName, string message)
+        //{
+        //    await Clients.All.SendAsync("Send", nickName, message);
+        //}
     }
 }
