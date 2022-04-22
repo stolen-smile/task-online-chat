@@ -1,34 +1,51 @@
 ﻿@model OnlineChat.Models.DTO.UserAndContactsViewModel;
-<h1>hello @Model.NickName</h1>
+<h1 class="text-center">hello @Model.NickName</h1>
 
 
 <div id="inputForm">
-        <input type="text" id="message" /><br/>
-        <input type="text" id="toUser" />
+        <input type="text" id="message" /><br/>       
         <input type="button" id="sendBtn" value="Отправить" />
 </div>
 <div class="row">
     <div id="chats" class="col-md-3">
-        @foreach(var contacts in @Model.Contacts)
-        {
-            <div>
-                <button class="btn">@contacts</button>
-            </div>
-        }
+        <div class="contacts">
+            @foreach(var contacts in @Model.Contacts)
+            {
+              <button class="contacts btn btn-primary btn-block" value="@contacts">@contacts</button> 
+            }
+        </div>   
     </div>
     <div id="chatroom" class="col-md-9">
-        <h3>Chating</h3>
+        
+            <h3 class="text-center">Chating</h3>
+        
     </div>
 </div>
 
 
 
 <script>
+    //connection to hub
     const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chat")
             .build();
 
     const userName='@Model.NickName';
+    let adresseeName="";
+
+    const buttons = document.getElementsByTagName("button");
+    Array.from(buttons).forEach(button =>
+        button.addEventListener("click", function(button){
+            adresseeName=this.value;
+
+
+            //let elem = document.createElement("p");
+            //elem.appendChild(document.createTextNode(this.value));
+
+            //var firstElem = document.getElementById("chatroom").firstChild;
+            //document.getElementById("chatroom").insertBefore(elem, firstElem);
+        }));
+
 
     // получение сообщения от сервера
         hubConnection.on('Send', function (userName, message) {
@@ -46,16 +63,17 @@
   
             var firstElem = document.getElementById("chatroom").firstChild;
             document.getElementById("chatroom").insertBefore(elem, firstElem);
-  
+            
         });
 
 
         // отправка сообщения на сервер
         document.getElementById("sendBtn").addEventListener("click", function (e) {
             let message = document.getElementById("message").value;
-            let toUser = document.getElementById("toUser").value;
-            hubConnection.invoke("Send", userName,toUser, message);
+            
+            hubConnection.invoke("Send", userName,adresseeName, message);
         });
  
+        
         hubConnection.start();
 </script>
