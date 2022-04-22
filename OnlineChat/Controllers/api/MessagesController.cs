@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineChat.Mock;
 using OnlineChat.Models;
+using System.Linq;
 
 namespace OnlineChat.Controllers.api
 {
@@ -17,17 +18,16 @@ namespace OnlineChat.Controllers.api
         }
 
         [HttpGet]
-        public ActionResult<IQueryable<Message>> Get(string nickNameSender, string nickNameAdressee)
+        public ActionResult<IEnumerable<Message>> Get(string nickNameSender, string nickNameAdressee)
         {
-            IQueryable<Message> messagesBySenderToAdressee  = _context.Messages.//OrderBy(m => m.SendTime).
-                Where(m => m.Sender.NickName == nickNameSender && m.AddresseeUser.NickName == nickNameAdressee);
+            var messagesBySenderToAdressee = _context.Messages.Include(m=>m.Sender).
+                Where(m => m.Sender.NickName==nickNameSender && m.AddresseeUser.NickName == nickNameAdressee).//OrderBy(m => m.SendTime).  
+              ToList();//
 
+            var messagesByAdresseeToSender = _context.Messages.//OrderBy(m => m.SendTime).
+                Where(m=> m.Sender.NickName == nickNameAdressee && m.AddresseeUser.NickName==nickNameSender).ToList();
 
-
-            IQueryable<Message> messagesByAdresseeToSender = _context.Messages.//OrderBy(m => m.SendTime).
-                Where(m=> m.Sender.NickName== nickNameAdressee && m.AddresseeUser.NickName==nickNameSender);
-
-            IQueryable < Message > messages = messagesBySenderToAdressee.Union(messagesByAdresseeToSender).
+            var messages = messagesBySenderToAdressee.Union(messagesByAdresseeToSender).
                 OrderBy(m => m.SendTime);
 
             return Ok(messages);
