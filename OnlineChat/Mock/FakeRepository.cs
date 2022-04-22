@@ -20,7 +20,8 @@ namespace OnlineChat.Mock
             {
                 Text = "Hello Platon, how are you? It's me, Tom.",
                 Sender = Tom,
-                AddresseeUser = Platon
+                AddresseeUser = Platon,
+                SendTime = new DateTime(2022, 7, 20, 18, 30, 25)//year month day 
             };
             Tom.Messages = new List<Message>() { messageFromTomToPlaton };
 
@@ -29,14 +30,16 @@ namespace OnlineChat.Mock
             {
                 Text = "Hello Tom, how is Platon? I am worry a bit.",
                 Sender = hottabych,
-                AddresseeUser = Tom
+                AddresseeUser = Tom,
+                SendTime = new DateTime(2022, 7, 20, 18, 29, 25)//year month day 
             };
 
             Message messageFromHottabychToPrepared = new Message()
             {
                 Text = "Hello friend!",
                 Sender = hottabych,
-                AddresseeUser = prepared
+                AddresseeUser = prepared,
+                SendTime = new DateTime(2022, 7, 20, 18, 45, 25)//year month day 
             };
             hottabych.Messages = new List<Message>()
             {
@@ -49,13 +52,15 @@ namespace OnlineChat.Mock
             {
                 Text = "Hello lad)",
                 Sender = prepared,
-                AddresseeUser = hottabych
+                AddresseeUser = hottabych,
+                SendTime = new DateTime(2022, 7, 20, 18, 47, 25)//year month day 
             };
             Message messageFromPreparedToTom = new Message()
             {
                 Text = "How are you Tom?",
                 Sender = prepared,
-                AddresseeUser = Tom
+                AddresseeUser = Tom,
+                SendTime = new DateTime(2022, 7, 20, 18, 44, 25)//year month day 
             };
             prepared.Messages = new List<Message>()
             {
@@ -81,7 +86,8 @@ namespace OnlineChat.Mock
             {
                 Text = "Hello Platon, how are you? It's me, Tom.",
                 Sender = Tom,
-                AddresseeUser = Platon
+                AddresseeUser = Platon,
+                SendTime = new DateTime(2022, 7, 20, 18, 30, 25)//year month day 
             };
             Tom.Messages = new List<Message>() { messageFromTomToPlaton };
 
@@ -90,14 +96,16 @@ namespace OnlineChat.Mock
             {
                 Text = "Hello Tom, how is Platon? I am worry a bit.",
                 Sender = hottabych,
-                AddresseeUser = Tom
+                AddresseeUser = Tom,
+                SendTime = new DateTime(2022, 7, 20, 18, 29, 25)//year month day
             };
 
             Message messageFromHottabychToPrepared = new Message()
             {
                 Text = "Hello friend!",
                 Sender = hottabych,
-                AddresseeUser = prepared
+                AddresseeUser = prepared,
+                SendTime = new DateTime(2022, 7, 20, 18, 45, 25)//year month day
             };
             hottabych.Messages = new List<Message>()
             {
@@ -110,13 +118,15 @@ namespace OnlineChat.Mock
             {
                 Text = "Hello lad)",
                 Sender = prepared,
-                AddresseeUser = hottabych
+                AddresseeUser = hottabych,
+                SendTime = new DateTime(2022, 7, 20, 18, 47, 25)//year month day
             };
             Message messageFromPreparedToTom = new Message()
             {
                 Text = "How are you Tom?",
                 Sender = prepared,
-                AddresseeUser = Tom
+                AddresseeUser = Tom,
+                SendTime = new DateTime(2022, 7, 20, 18, 44, 25)//year month day 
             };
             prepared.Messages = new List<Message>()
             {
