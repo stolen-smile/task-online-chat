@@ -16,11 +16,22 @@ namespace OnlineChat.Controllers.api
             _context=context;
         }
 
-        //[HttpGet("{nickName}")]
-        //public ActionResult<IQueryable<Message>> Get(string nickNameSender, string)
-        //{
-        //    return  _context.Messages.All(u=>u.Sender.NickName==nickName);
-        //}
+        [HttpGet]
+        public ActionResult<IQueryable<Message>> Get(string nickNameSender, string nickNameAdressee)
+        {
+            IQueryable<Message> messagesBySenderToAdressee  = _context.Messages.//OrderBy(m => m.SendTime).
+                Where(m => m.Sender.NickName == nickNameSender && m.AddresseeUser.NickName == nickNameAdressee);
+
+
+
+            IQueryable<Message> messagesByAdresseeToSender = _context.Messages.//OrderBy(m => m.SendTime).
+                Where(m=> m.Sender.NickName== nickNameAdressee && m.AddresseeUser.NickName==nickNameSender);
+
+            IQueryable < Message > messages = messagesBySenderToAdressee.Union(messagesByAdresseeToSender).
+                OrderBy(m => m.SendTime);
+
+            return Ok(messages);
+        }
 
     }
 }
