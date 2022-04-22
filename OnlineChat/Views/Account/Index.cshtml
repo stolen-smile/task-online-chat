@@ -33,17 +33,63 @@
     const userName='@Model.NickName';
     let adresseeName="";
 
+    async function GetMessages(sender, adressee){
+        let url="/Messages?nickNameSender="+sender+"&nickNameAdressee="+adressee;
+        const response = await fetch(url, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true){
+                const messages = await response.json();
+               // const messages = JSON.parse(response);
+                return messages;
+            }
+
+        return "nothing";
+    }
+
+
     const buttons = document.getElementsByTagName("button");
     Array.from(buttons).forEach(button =>
         button.addEventListener("click", function(button){
             adresseeName=this.value;
+            
+            //let test=GetMessages(userName,adresseeName);
+            let url="/Messages?nickNameSender="+userName+"&nickNameAdressee="+adresseeName;
+
+            fetch(url, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            }).then(response => response.json()).then(data=>{
+                for(let i=0;i<data.length;i++){
+                    let elem = document.createElement("p");
+                    elem.appendChild(document.createTextNode(data[i].text));
+
+                    var firstElem = document.getElementById("chatroom").firstChild;
+                    document.getElementById("chatroom").insertBefore(elem, firstElem);
+                }
+                
+            
+            });
+            
 
 
-            //let elem = document.createElement("p");
-            //elem.appendChild(document.createTextNode(this.value));
 
-            //var firstElem = document.getElementById("chatroom").firstChild;
-            //document.getElementById("chatroom").insertBefore(elem, firstElem);
+
+                
+               
+                
+                
+           
+
+
+            
+            
+            
+            
+
+            
+            
         }));
 
 
