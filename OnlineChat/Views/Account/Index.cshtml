@@ -2,10 +2,7 @@
 <h1 class="text-center">hello @Model.NickName</h1>
 
 
-<div id="inputForm">
-        <input type="text" id="message" /><br/>       
-        <input type="button" id="sendBtn" value="Отправить" />
-</div>
+
 <div class="row">
     <div id="chats" class="col-md-3">
         <div class="contacts">
@@ -29,31 +26,47 @@
     const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chat")
             .build();
-
+    //names of users
     const userName='@Model.NickName';
     let adresseeName="";
 
-    async function GetMessages(sender, adressee){
-        let url="/Messages?nickNameSender="+sender+"&nickNameAdressee="+adressee;
-        const response = await fetch(url, {
-                method: "GET",
-                headers: { "Accept": "application/json" }
-            });
-            if (response.ok === true){
-                const messages = await response.json();
-               // const messages = JSON.parse(response);
-                return messages;
-            }
+    //adding chat
+    function addChat(){
+        let form= document.createElement("div");
+        form.setAttribute("id","inputForm");
 
-        return "nothing";
+        let inputText = document.createElement("input");
+        inputText.type = "text";
+        inputText.id="message";
+
+        let inputButton = document.createElement("input");
+        inputButton.type = "button";
+        inputButton.id="sendBtn";
+        inputButton.value="Send";
+
+        form.appendChild(inputText);
+        form.appendChild(inputButton);
+
+        var firstElem = document.getElementById("chatroom");//.firstChild;
+        firstElem.appendChild(form);
+        //document.getElementById("chatroom").insertBefore(form, firstElem);
     }
+    //clear chat
+    function clearChat(){
+        var firstElem = document.getElementById("chatroom");
+        firstElem.innerHTML = '';
+    }
+    
 
-
+    
+    //
     const buttons = document.getElementsByTagName("button");
     Array.from(buttons).forEach(button =>
         button.addEventListener("click", function(button){
             adresseeName=this.value;
             
+            //clear chat space
+            clearChat();
             //let test=GetMessages(userName,adresseeName);
             let url="/Messages?nickNameSender="+userName+"&nickNameAdressee="+adresseeName;
 
@@ -65,31 +78,21 @@
                     let elem = document.createElement("p");
                     elem.appendChild(document.createTextNode(data[i].text));
 
-                    var firstElem = document.getElementById("chatroom").firstChild;
-                    document.getElementById("chatroom").insertBefore(elem, firstElem);
+                    var firstElem = document.getElementById("chatroom");//.firstChild;
+                    firstElem.appendChild(elem);
+                    //document.getElementById("chatroom").insertBefore(elem, firstElem);
                 }
                 
+                addChat();
+
+                // отправка сообщения на сервер
+                document.getElementById("sendBtn").addEventListener("click", function (e) {
+                let message = document.getElementById("message").value;
             
+                hubConnection.invoke("Send", userName,adresseeName, message);
+        });
             });
-            
-
-
-
-
-                
-               
-                
-                
-           
-
-
-            
-            
-            
-            
-
-            
-            
+                     
         }));
 
 
@@ -113,12 +116,7 @@
         });
 
 
-        // отправка сообщения на сервер
-        document.getElementById("sendBtn").addEventListener("click", function (e) {
-            let message = document.getElementById("message").value;
-            
-            hubConnection.invoke("Send", userName,adresseeName, message);
-        });
+        
  
         
         hubConnection.start();
