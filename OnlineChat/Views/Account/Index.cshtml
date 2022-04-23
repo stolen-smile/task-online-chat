@@ -96,6 +96,9 @@
                 let message = document.getElementById("message").value;
             
                 hubConnection.invoke("Send", userName,adresseeName, message);
+                //clear input field after sending message
+                let inputField = document.getElementById("message");
+                inputField.value="";
         });
             });
                      
