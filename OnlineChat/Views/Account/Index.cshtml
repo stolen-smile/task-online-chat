@@ -75,10 +75,15 @@
                 headers: { "Accept": "application/json" }
             }).then(response => response.json()).then(data=>{
                 for(let i=0;i<data.length;i++){
+                    let userNameElem = document.createElement("b");
+                    userNameElem.appendChild(document.createTextNode(data[i].sender.nickName + ': '));
+
                     let elem = document.createElement("p");
                     elem.appendChild(document.createTextNode(data[i].text));
 
                     var firstElem = document.getElementById("chatroom");//.firstChild;
+
+                    firstElem.appendChild(userNameElem);
                     firstElem.appendChild(elem);
                     //document.getElementById("chatroom").insertBefore(elem, firstElem);
                 }
