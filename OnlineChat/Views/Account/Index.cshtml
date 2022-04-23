@@ -79,11 +79,12 @@
                     userNameElem.appendChild(document.createTextNode(data[i].sender.nickName + ': '));
 
                     let elem = document.createElement("p");
+                    elem.appendChild(userNameElem);
                     elem.appendChild(document.createTextNode(data[i].text));
 
                     var firstElem = document.getElementById("chatroom");//.firstChild;
 
-                    firstElem.appendChild(userNameElem);
+                    //firstElem.appendChild(userNameElem);
                     firstElem.appendChild(elem);
                     //document.getElementById("chatroom").insertBefore(elem, firstElem);
                 }
@@ -115,7 +116,8 @@
             elem.appendChild(userNameElem);
             elem.appendChild(document.createTextNode(message));
   
-            var firstElem = document.getElementById("chatroom").firstChild;
+            var firstElem = document.getElementById("inputForm");//.firstChild;
+            
             document.getElementById("chatroom").insertBefore(elem, firstElem);
             
         });
