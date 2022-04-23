@@ -2,18 +2,20 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
- 
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true" >
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div class="form-group">
-            <label asp-for="NickName" class="text-primary">Enter your nick name</label><br />
-            <input type="text" asp-for="NickName" />
-            <span asp-validation-for="NickName" /><br />
-        </div>
+ <div class="container-fluid">
+    <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true"
+    class="d-flex justify-content-center text-center mt-5">
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div >
+            <div class="form-group ">
+                <label asp-for="NickName" class="text-primary">Enter your nick name</label><br />
+                <input type="text" asp-for="NickName" />
+                <span asp-validation-for="NickName" /><br />
+            </div>
         
-        <div class="form-group">
-            <input type="submit" value="Войти" class="btn btn-primary" />
+            <div>
+                <input type="submit" value="Войти" class="btn btn-primary btn-block" />
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
