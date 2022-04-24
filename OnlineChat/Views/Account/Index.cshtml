@@ -8,15 +8,15 @@
         <div class="contacts pt-2">
             @foreach(var contacts in @Model.Contacts)
             {
-                <button class = "btn btn-primary btn-block" value="@contacts">@contacts</button>
+                <button class = "contact btn btn-primary btn-block" value="@contacts">@contacts</button>
             }         
         </div>
         <div class="groups pt-2">
             @if(Model.Groups != null)
             {
-                foreach(var groups in Model.Groups)
+                foreach(var group in Model.Groups)
                 {
-                    <button class= "btn btn-primary btn-block" value="@groups">@groups</button>
+                    <button class= "group btn btn-primary btn-block" value="@group">@group</button>
                 }
             }
         </div>
@@ -71,7 +71,7 @@
 
     
     //
-    const contacts = document.getElementsByTagName("button");
+    const contacts = document.querySelectorAll("button.contact");//.getElementsByTagName("button");
     Array.from(contacts).forEach(contact =>
         contact.addEventListener("click", function(contact){
             adresseeName=this.value;
@@ -110,11 +110,19 @@
                 //clear input field after sending message
                 let inputField = document.getElementById("message");
                 inputField.value="";
-        });
+                });
             });
                      
         }));
 
+        const groupContacts = document.querySelectorAll("button.group");
+        Array.from(groupContacts).forEach(groupContact =>
+            groupContact.addEventListener("click", function(groupContact){
+                adresseeName=this.value;
+
+                clearChat();
+            })
+        );
 
     // получение сообщения от сервера
         hubConnection.on('Send', function (userName, message) {
