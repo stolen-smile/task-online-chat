@@ -83,12 +83,12 @@ namespace OnlineChat.Mock
                 GroupName = "Test Group",
                 UsersInGroup = new List<User>()
                 {
-                    hottabych,prepared,Platon
+                    hottabych,prepared,Tom
                 }
             };
             hottabych.Groups = new List<Group>() { group };
             prepared.Groups = new List<Group>() { group };
-            Platon.Groups = new List<Group>() { group };
+            Tom.Groups = new List<Group>() { group };
             Message messageForGroup = new Message()
             {
                 Text = "Hello guys, this is test group!",
@@ -171,12 +171,12 @@ namespace OnlineChat.Mock
                 GroupName = "Test Group",
                 UsersInGroup = new List<User>()
                 {
-                    hottabych,prepared,Platon
+                    hottabych,prepared,Tom
                 }
             };
             hottabych.Groups = new List<Group>() { group };
             prepared.Groups = new List<Group>() { group };
-            Platon.Groups = new List<Group>() { group };
+            Tom.Groups = new List<Group>() { group };
             Message messageForGroup = new Message()
             {
                 Text = "Hello guys, this is test group!",
@@ -265,12 +265,12 @@ namespace OnlineChat.Mock
                 GroupName = "Test Group",
                 UsersInGroup = new List<User>()
                 {
-                    hottabych,prepared,Platon
+                    hottabych,prepared,Tom
                 }
             };
             hottabych.Groups = new List<Group>() { group };
             prepared.Groups = new List<Group>() { group };
-            Platon.Groups = new List<Group>() { group };
+            Tom.Groups = new List<Group>() { group };
             Message messageForGroup = new Message()
             {
                 Text = "Hello guys, this is test group!",

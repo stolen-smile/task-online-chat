@@ -14,14 +14,33 @@ namespace OnlineChat.Services
         public ChatHub(IRepository context)
         {
             _context = context;
+            
         }
 
+        public override Task OnConnectedAsync()
+        {
+            var user = _context.Users.SingleOrDefault(u=>u.NickName==Context.User.Identity.Name);
+            if(user is null)
+            {
+                return base.OnConnectedAsync();
+            } else
+            if(user.Groups is null)
+            {
+                return base.OnConnectedAsync();
+            }
 
-        //we send message to client
+            foreach(var g in user.Groups)
+            {
+                Groups.AddToGroupAsync(Context.ConnectionId, g.GroupName);
+            }
+
+            //Groups.Add(Context.ConnectionId, item.RoomName);
+            return base.OnConnectedAsync();
+        }
         public async Task Send(string nickName,string to, string message)
         {
-            await Clients.User(to).SendAsync("Send", nickName, message);
-            await Clients.User(nickName).SendAsync("Send", nickName, message);
+            await Clients.User(to).SendAsync("Recieve", nickName, message);
+            await Clients.User(nickName).SendAsync("Recieve", nickName, message);
 
             User sender = _context.Users.FirstOrDefault(m => m.NickName == nickName);
             User adressee = _context.Users.FirstOrDefault(m => m.NickName == to);
@@ -42,10 +61,12 @@ namespace OnlineChat.Services
             //_context.Add(newMessage);
         }
 
-        //client recive
-        //public async Task Receive(string nickName, string to, string message)
-        //{
-        //    await Clients.All.SendAsync("Send", nickName, message);
-        //}
+        //SendToGroups
+        public async Task SendToGroups(string nickName, string groupName, string message)
+        {
+            
+            //await initGroups();
+            await Clients.Group(groupName).SendAsync("Recieve", nickName , message);
+        }
     }
 }

@@ -118,14 +118,55 @@
         const groupContacts = document.querySelectorAll("button.group");
         Array.from(groupContacts).forEach(groupContact =>
             groupContact.addEventListener("click", function(groupContact){
+                
                 adresseeName=this.value;
+                
+                let url="/MessagesFromGroups/?groupName="+adresseeName;//group name
 
                 clearChat();
-            })
-        );
+
+                fetch(url, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+                }).then(response => response.json()).then(data =>{
+                    for(let i=0;i<data.length;i++){
+                    let userNameElem = document.createElement("b");
+                    userNameElem.appendChild(document.createTextNode(data[i].sender.nickName + ': '));
+
+                    let elem = document.createElement("p");
+                    elem.appendChild(userNameElem);
+                    elem.appendChild(document.createTextNode(data[i].text));
+
+                    let chatWindow = document.getElementById("chatroom");//.firstChild;
+
+                    //firstElem.appendChild(userNameElem);
+                    chatWindow.appendChild(elem);
+                    //document.getElementById("chatroom").insertBefore(elem, firstElem);
+                    }
+
+                    addChat();
+
+                    
+                    // отправка сообщения на сервер
+                    document.getElementById("sendBtn").addEventListener("click", function (e) {
+                    let message = document.getElementById("message").value;
+            //CHANGE LOGIC HERE
+                    hubConnection.invoke("SendToGroups", userName,adresseeName, message);
+            //CHANGE LOGIC HERE
+                    //clear input field after sending message
+                    let inputField = document.getElementById("message");
+                    inputField.value="";
+                    });
+                    
+                });
+
+
+
+                
+            }));
 
     // получение сообщения от сервера
-        hubConnection.on('Send', function (userName, message) {
+        hubConnection.on('Recieve', function (userName, message) {
   
             // создаем элемент <b> для имени пользователя
             let userNameElem = document.createElement("b");
