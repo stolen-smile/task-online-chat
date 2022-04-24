@@ -5,12 +5,23 @@
 
 <div class="row">
     <div id="chats" class="col-md-3">
-        <div class="contacts">
+        <div class="contacts pt-2">
             @foreach(var contacts in @Model.Contacts)
             {
-              <button class="contacts btn btn-primary btn-block" value="@contacts">@contacts</button> 
+                <button class = "btn btn-primary btn-block" value="@contacts">@contacts</button>
+            }         
+        </div>
+        <div class="groups pt-2">
+            @if(Model.Groups != null)
+            {
+                foreach(var groups in Model.Groups)
+                {
+                    <button class= "btn btn-primary btn-block" value="@groups">@groups</button>
+                }
             }
-        </div>   
+        </div>
+            
+        
     </div>
     <div id="chatroom" class="col-md-9">
         
