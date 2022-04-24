@@ -6,5 +6,7 @@ namespace OnlineChat.Mock
     {
         IQueryable<User> Users { get; }
         IQueryable<Message> Messages { get; }
+
+        
     }
 }

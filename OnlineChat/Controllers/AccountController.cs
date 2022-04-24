@@ -45,11 +45,24 @@ namespace OnlineChat.Controllers
                     var viewModel = new UserAndContactsViewModel
                     {
                         NickName = user.NickName,
-                        Contacts = new List<string>()
+                        Contacts = new List<string>(),
+                        Groups = new List<string>()                        
                     };
                     foreach (var message in user.Messages)
                     {
+                        if (message.AddresseeUser is null)
+                            continue;
                         viewModel.Contacts.Add(message.AddresseeUser.NickName);
+                    }
+                    if (user.Groups != null) {
+                        foreach (var g in user.Groups)
+                        {
+                            viewModel.Groups.Add(g.GroupName);
+                        }
+                    }
+                    else
+                    {
+                        viewModel.Groups = null;
                     }
                     //redirect to chat
                     return RedirectToAction("Index", "Account", viewModel);// переадресация на метод Index

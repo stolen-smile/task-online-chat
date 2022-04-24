@@ -4,5 +4,6 @@
     {
         public string NickName { get; set; }
         public List<string> Contacts { get; set; }
+        public List<string> Groups { get; set; }
     }
 }
