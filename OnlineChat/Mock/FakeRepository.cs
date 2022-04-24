@@ -291,6 +291,7 @@ namespace OnlineChat.Mock
 
         public IQueryable<User> Users => _users;
 
+        public IQueryable<Group> Groups => _groups;
         public IQueryable<Message> Messages { get => _messages; } 
     } 
        
