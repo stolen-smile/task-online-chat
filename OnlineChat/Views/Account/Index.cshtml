@@ -78,9 +78,28 @@
         blockWithChoices.setAttribute("id","block-choices");
 
         let buttonDelete = document.createElement("button");
-        buttonDelete.setAttribute("class","deleteButton")
+        buttonDelete.setAttribute("id","deleteButton");
+        buttonDelete.setAttribute("class","btn m-2");
+        buttonDelete.innerText="Delete";
+        
+
+        let buttonEdit = document.createElement("button");
+        buttonEdit.setAttribute("id","editButton");
+        buttonEdit.setAttribute("class","btn m-2");
+        buttonEdit.innerText="Edit";
+        
+
+        let buttonReply = document.createElement("button");
+        buttonReply.setAttribute("id","replyButton");
+        buttonReply.setAttribute("class","btn m-2");
+        buttonReply.innerHTML="Reply";
+        
+
 
         blockWithChoices.appendChild(buttonDelete);
+        blockWithChoices.appendChild(buttonEdit);
+        blockWithChoices.appendChild(buttonReply);
+
 
         let firstElem = document.getElementById("chatroom").firstChild;
         document.getElementById("chatroom").insertBefore(blockWithChoices, firstElem);
@@ -97,8 +116,7 @@
                         });
         if(checked==true){
             addPanelChoice();
-        }else{
-            //console.log("hhhhhhhhhhhhhhhhhh");
+        }else{        
             removePanelChoice();
         }  
     }
