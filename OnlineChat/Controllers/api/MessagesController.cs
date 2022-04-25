@@ -28,7 +28,7 @@ namespace OnlineChat.Controllers.api
                 Where(m => m.Sender.NickName == nickNameAdressee && m.AddresseeUser.NickName == nickNameSender).ToList();
 
             var messages = messagesBySenderToAdressee.Union(messagesByAdresseeToSender).
-                OrderBy(m => m.SendTime);
+                OrderBy(m => m.SendTime.Value.Ticks);
 
             return Ok(messages);
             //return Ok();
