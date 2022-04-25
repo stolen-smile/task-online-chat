@@ -25,7 +25,7 @@
     </div>
     <div id="chatroom" class="col-md-9">
         
-            <h3 class="text-center">Chating</h3>
+            <h3 id="title" class="text-center">Chating</h3>
         
     </div>
 </div>
@@ -58,7 +58,7 @@
         form.appendChild(inputText);
         form.appendChild(inputButton);
 
-        var chatWindow = document.getElementById("chatroom");//.firstChild;
+        let chatWindow = document.getElementById("chatroom");//.firstChild;
         chatWindow.appendChild(form);
         //document.getElementById("chatroom").insertBefore(form, firstElem);
     }
@@ -67,7 +67,50 @@
         var chatWindow = document.getElementById("chatroom");
         chatWindow.innerHTML = '';
     }
-    
+
+    function addPanelChoice(){
+        let blockChoice = document.getElementById("block-choices");
+        if(blockChoice!=null){
+            return;
+        }
+
+        let blockWithChoices = document.createElement("div");
+        blockWithChoices.setAttribute("id","block-choices");
+
+        let buttonDelete = document.createElement("button");
+        buttonDelete.setAttribute("class","deleteButton")
+
+        blockWithChoices.appendChild(buttonDelete);
+
+        let firstElem = document.getElementById("chatroom").firstChild;
+        document.getElementById("chatroom").insertBefore(blockWithChoices, firstElem);
+    }
+    function removePanelChoice(){
+        let blockChoice = document.getElementById("block-choices");
+        document.getElementById("chatroom").removeChild(blockChoice);
+    }
+
+    function checkfunction(){
+        let checkBoxes = document.querySelectorAll("input.select-message");
+        let checked = Array.from(checkBoxes).some(function(p){
+                            return p.checked ==true;
+                        });
+        if(checked==true){
+            addPanelChoice();
+        }else{
+            //console.log("hhhhhhhhhhhhhhhhhh");
+            removePanelChoice();
+        }  
+    }
+
+    function addCheckBox(){
+        let checkbox= document.createElement("input");
+        checkbox.type="checkbox"
+        //checkbox.class="select-message"
+        checkbox.setAttribute("class","select-message");
+        checkbox.setAttribute("onclick","checkfunction()");
+        return checkbox;
+    }
 
     
     //
@@ -90,6 +133,7 @@
                     userNameElem.appendChild(document.createTextNode(data[i].sender.nickName + ': '));
 
                     let elem = document.createElement("p");
+                    elem.appendChild(addCheckBox());
                     elem.appendChild(userNameElem);
                     elem.appendChild(document.createTextNode(data[i].text));
                     //elem.appendChild(document.createTextNode(data[i].sendTime));
@@ -165,6 +209,15 @@
 
                 
             }));
+
+        //const checkBoxes = document.querySelectorAll("input.select-message");
+        //Array.from(checkBoxes).forEach(checkBox =>{
+        //    checkBox.addEventListener("click", function(checkBox){
+        //        if(checkBox.checked==true){
+
+        //        }
+        //    });
+        //});
 
     // получение сообщения от сервера
         hubConnection.on('Recieve', function (userName, message) {
