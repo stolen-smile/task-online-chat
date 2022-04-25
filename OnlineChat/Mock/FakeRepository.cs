@@ -258,7 +258,7 @@ namespace OnlineChat.Mock
             };
 
 
-            
+
             //groups
             Group group = new Group()
             {
@@ -291,7 +291,7 @@ namespace OnlineChat.Mock
 
         public IQueryable<User> Users => _users;
 
-        public IQueryable<Group> Groups => _groups;
+        public IQueryable<Group> GroupChats => _groups;
         public IQueryable<Message> Messages { get => _messages; } 
     } 
        

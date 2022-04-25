@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineChat.Mock;
+using OnlineChat.Data;
 using OnlineChat.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
@@ -13,9 +13,9 @@ namespace OnlineChat.Controllers
 {
     public class AccountController : Controller
     {
-        private IRepository _context;
+        private Context _context;
 
-        public AccountController(IRepository context)
+        public AccountController(Context context)
         {
             _context = context;
         }
@@ -37,7 +37,8 @@ namespace OnlineChat.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user =  _context.Users.FirstOrDefault(u => u.NickName == model.NickName);
+                User user =  _context.Users.Include(m=>m.Messages).Include(m=>m.Groups)
+                    .FirstOrDefault(u => u.NickName == model.NickName);
                 if (user != null)
                 {
                     await Authenticate(user); // аутентификация
@@ -50,11 +51,15 @@ namespace OnlineChat.Controllers
                     };
                     foreach (var message in user.Messages)
                     {
-                        if (message.AddresseeUser is null)
+                        var m = _context.Messages.Include(m=>m.AddresseeUser)
+                            .FirstOrDefault(m=>m.Id==message.Id);
+
+                        if (m.AddresseeUser is null)
                             continue;
-                        viewModel.Contacts.Add(message.AddresseeUser.NickName);
+                        viewModel.Contacts.Add(m.AddresseeUser.NickName);
                     }
-                    if (user.Groups != null) {
+                    if (user.Groups != null)
+                    {
                         foreach (var g in user.Groups)
                         {
                             viewModel.Groups.Add(g.GroupName);

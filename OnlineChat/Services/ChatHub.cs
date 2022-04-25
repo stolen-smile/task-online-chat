@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using OnlineChat.Mock;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using OnlineChat.Data;
+using Microsoft.EntityFrameworkCore;
 using OnlineChat.Models;
 namespace OnlineChat.Services
 {
     [Authorize]
     public class ChatHub : Hub
     {
-        protected IRepository _context;
+        protected Context _context;
 
-        public ChatHub(IRepository context)
+        public ChatHub(Context context)
         {
             _context = context;
             
@@ -19,17 +18,18 @@ namespace OnlineChat.Services
 
         public override Task OnConnectedAsync()
         {
-            var user = _context.Users.SingleOrDefault(u=>u.NickName==Context.User.Identity.Name);
-            if(user is null)
+            var user = _context.Users.Include(m=>m.Groups).SingleOrDefault(u => u.NickName == Context.User.Identity.Name);
+            if (user is null)
             {
                 return base.OnConnectedAsync();
-            } else
-            if(user.Groups is null)
+            }
+            else
+            if (user.Groups is null)
             {
                 return base.OnConnectedAsync();
             }
 
-            foreach(var g in user.Groups)
+            foreach (var g in user.Groups)
             {
                 Groups.AddToGroupAsync(Context.ConnectionId, g.GroupName);
             }
@@ -46,16 +46,16 @@ namespace OnlineChat.Services
             User adressee = _context.Users.FirstOrDefault(m => m.NickName == to);
 
 
-            Message newMessage = new Message()
-            {
-                Text = message,
-                SendTime = DateTime.Now,
-                Sender = sender,
-                AddresseeUser = adressee,
-                AddresseeGroup = null,
-            };
+            //Message newMessage = new Message()
+            //{
+            //    Text = message,
+            //    SendTime = DateTime.Now,
+            //    Sender = sender,
+            //    AddresseeUser = adressee,
+            //    AddresseeGroup = null,
+            //};
 
-            sender.Messages.Add(newMessage);
+            //sender.Messages.Add(newMessage);
             //my bezobraznye implementazii
             //_context.Messages.Append<Message>(newMessage);
             //_context.Add(newMessage);

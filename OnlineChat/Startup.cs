@@ -1,18 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using OnlineChat.Services;
-using OnlineChat.Mock;
+
 using Microsoft.AspNetCore.SignalR;
+using OnlineChat.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace OnlineChat
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
-            //string connection = "Server=(localdb)\\mssqllocaldb;Database=authsignalrappdb;Trusted_Connection=True;";
-            //services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<Context>(options =>
+                options.UseSqlServer(Configuration["Data:OnlineChatData:ConnectionString"]));
+
+            services.AddTransient<Context>();
+            //services.AddSqlite<Context>("Data Source=OnlineChatTwo.db");
+            //UNMUTE ABOVE AND MUTE BELOW
             
-            services.AddTransient<IRepository, FakeRepository>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -49,6 +59,8 @@ namespace OnlineChat
                     pattern: "{controller=Account}/{action=Login}");
                 endpoints.MapHub<ChatHub>("/chat");
             });
+
+            SeedData.EnsurePopulated(app);
         }
     }
 }
