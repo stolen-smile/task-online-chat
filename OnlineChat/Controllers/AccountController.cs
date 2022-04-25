@@ -56,7 +56,11 @@ namespace OnlineChat.Controllers
 
                         if (m.AddresseeUser is null)
                             continue;
-                        viewModel.Contacts.Add(m.AddresseeUser.NickName);
+
+                        if (!viewModel.Contacts.Contains(m.AddresseeUser.NickName))
+                        {
+                            viewModel.Contacts.Add(m.AddresseeUser.NickName);
+                        }                                   
                     }
                     if (user.Groups != null)
                     {

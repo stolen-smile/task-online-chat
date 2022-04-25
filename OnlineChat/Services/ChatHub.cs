@@ -42,23 +42,28 @@ namespace OnlineChat.Services
             await Clients.User(to).SendAsync("Recieve", nickName, message);
             await Clients.User(nickName).SendAsync("Recieve", nickName, message);
 
-            User sender = _context.Users.FirstOrDefault(m => m.NickName == nickName);
-            User adressee = _context.Users.FirstOrDefault(m => m.NickName == to);
+            User sender = _context.Users.Include(m=>m.Messages).Include(m=>m.Groups).
+                FirstOrDefault(m => m.NickName == nickName);
+            User adressee = _context.Users.Include(m => m.Messages).Include(m => m.Groups).
+                FirstOrDefault(m => m.NickName == to);
 
 
-            //Message newMessage = new Message()
-            //{
-            //    Text = message,
-            //    SendTime = DateTime.Now,
-            //    Sender = sender,
-            //    AddresseeUser = adressee,
-            //    AddresseeGroup = null,
-            //};
+            Message newMessage = new Message()
+            {
+                Text = message,
+                SendTime = DateTime.Now,
+                Sender = sender,
+                AddresseeUser = adressee,
+                AddresseeGroup = null,
+                DeletedForMyself = false,
+                ReplyTo = null
+            };
 
             //sender.Messages.Add(newMessage);
-            //my bezobraznye implementazii
-            //_context.Messages.Append<Message>(newMessage);
-            //_context.Add(newMessage);
+
+
+            _context.Messages.Add(newMessage);
+            _context.SaveChanges();
         }
 
         //SendToGroups
