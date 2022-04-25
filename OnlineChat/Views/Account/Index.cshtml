@@ -67,6 +67,15 @@
         var chatWindow = document.getElementById("chatroom");
         chatWindow.innerHTML = '';
     }
+    function deleteMessage(){
+        console.log("Delete something");
+    }
+    function editMessage(){
+        console.log("Edit something");
+    }
+    function replyMessage(){
+        console.log("Reply something");
+    }
 
     function addPanelChoice(){
         let blockChoice = document.getElementById("block-choices");
@@ -80,17 +89,20 @@
         let buttonDelete = document.createElement("button");
         buttonDelete.setAttribute("id","deleteButton");
         buttonDelete.setAttribute("class","btn m-2");
+        buttonDelete.setAttribute("onclick","deleteMessage()");
         buttonDelete.innerText="Delete";
         
 
         let buttonEdit = document.createElement("button");
         buttonEdit.setAttribute("id","editButton");
         buttonEdit.setAttribute("class","btn m-2");
+        buttonEdit.setAttribute("onclick","editMessage()");
         buttonEdit.innerText="Edit";
         
 
         let buttonReply = document.createElement("button");
         buttonReply.setAttribute("id","replyButton");
+        buttonReply.setAttribute("onclick","replyMessage()");
         buttonReply.setAttribute("class","btn m-2");
         buttonReply.innerHTML="Reply";
         
@@ -123,6 +135,7 @@
 
     function addCheckBox(){
         let checkbox= document.createElement("input");
+        //checkbox.setAttribute("id",id);
         checkbox.type="checkbox"
         //checkbox.class="select-message"
         checkbox.setAttribute("class","select-message");
@@ -151,6 +164,7 @@
                     userNameElem.appendChild(document.createTextNode(data[i].sender.nickName + ': '));
 
                     let elem = document.createElement("p");
+                    elem.setAttribute("id",data[i].id);
                     elem.appendChild(addCheckBox());
                     elem.appendChild(userNameElem);
                     elem.appendChild(document.createTextNode(data[i].text));
