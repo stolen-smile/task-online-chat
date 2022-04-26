@@ -41,7 +41,7 @@ namespace OnlineChat.Controllers
                     .FirstOrDefault(u => u.NickName == model.NickName);
                 if (user != null)
                 {
-                    await Authenticate(user); // аутентификация
+                    await Authenticate(user); 
                     //creat viewModel
                     var viewModel = new UserAndContactsViewModel
                     {
@@ -74,7 +74,7 @@ namespace OnlineChat.Controllers
                         viewModel.Groups = null;
                     }
                     //redirect to chat
-                    return RedirectToAction("Index", "Account", viewModel);// переадресация на метод Index
+                    return RedirectToAction("Index", "Account", viewModel);
                 }
                 ModelState.AddModelError("", "Bad nickname");
             }

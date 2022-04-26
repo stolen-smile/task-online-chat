@@ -12,8 +12,7 @@ namespace OnlineChat.Services
 
         public ChatHub(Context context)
         {
-            _context = context;
-            
+            _context = context;  
         }
 
         public override Task OnConnectedAsync()
@@ -33,15 +32,11 @@ namespace OnlineChat.Services
             {
                 Groups.AddToGroupAsync(Context.ConnectionId, g.GroupName);
             }
-
-            //Groups.Add(Context.ConnectionId, item.RoomName);
+           
             return base.OnConnectedAsync();
         }
         public async Task Send(string nickName,string to, string message)
         {
-            await Clients.User(to).SendAsync("Recieve", nickName, message);
-            await Clients.User(nickName).SendAsync("Recieve", nickName, message);
-
             User sender = _context.Users.Include(m=>m.Messages).Include(m=>m.Groups).
                 FirstOrDefault(m => m.NickName == nickName);
             User adressee = _context.Users.Include(m => m.Messages).Include(m => m.Groups).
@@ -59,19 +54,51 @@ namespace OnlineChat.Services
                 ReplyTo = null
             };
 
-            //sender.Messages.Add(newMessage);
-
-
             _context.Messages.Add(newMessage);
             _context.SaveChanges();
+
+            var fromContextMessage = _context.Messages.
+                FirstOrDefault(m=> m.Text== newMessage.Text &&
+                    m.SendTime == newMessage.SendTime &&
+                    m.Sender == sender &&
+                    m.AddresseeUser == adressee 
+                );
+
+            await Clients.User(to).SendAsync("Recieve", nickName, message, fromContextMessage.Id);
+            await Clients.User(nickName).SendAsync("Recieve", nickName, message, fromContextMessage.Id);
         }
 
         //SendToGroups
         public async Task SendToGroups(string nickName, string groupName, string message)
         {
-            
-            //await initGroups();
-            await Clients.Group(groupName).SendAsync("Recieve", nickName , message);
+            User sender = _context.Users.Include(m => m.Messages).Include(m => m.Groups).
+                FirstOrDefault(m => m.NickName == nickName);
+
+            Group groupAdresee = _context.Groups.Include(m => m.UsersInGroup).Include(m => m.MessagesInGroup).
+                FirstOrDefault(m => m.GroupName == groupName);
+
+            Message newMessage = new Message()
+            {
+                Text = message,
+                SendTime = DateTime.Now,
+                Sender = sender,
+                AddresseeUser = null,
+                AddresseeGroup = groupAdresee,
+                DeletedForMyself = false,
+                ReplyTo = null
+            };
+
+            _context.Messages.Add(newMessage);
+            _context.SaveChanges();
+
+            var fromContextMessage = _context.Messages.
+                FirstOrDefault(m => m.Text == newMessage.Text &&
+                    m.SendTime == newMessage.SendTime &&
+                    m.Sender == sender &&
+                    m.AddresseeGroup == groupAdresee
+                );
+
+            await Clients.Group(groupName).SendAsync("Recieve", nickName , message, fromContextMessage.Id);
         }
     }
 }

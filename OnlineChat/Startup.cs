@@ -19,10 +19,7 @@ namespace OnlineChat
             services.AddDbContext<Context>(options =>
                 options.UseSqlServer(Configuration["Data:OnlineChatData:ConnectionString"]));
 
-            services.AddTransient<Context>();
-            //services.AddSqlite<Context>("Data Source=OnlineChatTwo.db");
-            //UNMUTE ABOVE AND MUTE BELOW
-            
+            services.AddTransient<Context>();                    
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

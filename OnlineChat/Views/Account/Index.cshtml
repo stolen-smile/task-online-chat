@@ -58,20 +58,74 @@
         form.appendChild(inputText);
         form.appendChild(inputButton);
 
-        let chatWindow = document.getElementById("chatroom");//.firstChild;
-        chatWindow.appendChild(form);
-        //document.getElementById("chatroom").insertBefore(form, firstElem);
+        let chatWindow = document.getElementById("chatroom");
+        chatWindow.appendChild(form);        
     }
     //clear chat
     function clearChat(){
         var chatWindow = document.getElementById("chatroom");
         chatWindow.innerHTML = '';
     }
-    function deleteMessage(){
-        console.log("Delete something");
+    function deleteMessage(){     
+        let checkBoxes = document.querySelectorAll("input.select-message");
+        let messagesForDeleteIds=[];
+        Array.from(checkBoxes).forEach(p=>{
+              if(p.checked==true){
+                  messagesForDeleteIds.push(p.parentElement.id);
+              }              
+       });
+
+       let deleteForMe= confirm("Delete for all or only for me?");//should here use custom dialog box
+       if(deleteForMe){
+           //delete for all
+           Array.from(messagesForDeleteIds).forEach(messageId=>{
+               let url ="/Messages?id="+messageId+"&DeletedForMyself=false"
+               fetch(url,{
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            }).then(response=>{
+                if(response.ok){
+                    let chatWindow = document.getElementById("chatroom");
+                    chatWindow.removeChild(document.getElementById(messageId));
+                }
+            });            
+           });
+       }else{
+           console.log("delete for me");
+           
+       }  
     }
     function editMessage(){
         console.log("Edit something");
+
+        let checkBoxes = document.querySelectorAll("input.select-message");
+
+        let messagesForEditIds=[];
+
+        Array.from(checkBoxes).forEach(p=>{
+              if(p.checked==true){
+                  messagesForEditIds.push(p.parentElement.id);
+              }});
+        let editMessage = prompt("Type new text");
+        if(editMessage!=null){
+            Array.from(messagesForEditIds).forEach(messageId=>{
+                let url="/Messages?id="+messageId+"&newText="+editMessage;
+                fetch(url,{
+                    method: "PUT",
+                    headers: { "Accept": "application/json" }
+                }).then(response=>{
+                    if(response.ok){
+                        
+                        let text = document.getElementById(messageId).innerText;
+                        let userName = text.split(':')[0];
+                      
+                        text =addCheckBox().outerHTML+' <b>'+userName+': '+'</b>'+editMessage;
+
+                        document.getElementById(messageId).innerHTML=text;   
+                    }
+                });
+            });    
+        }
     }
     function replyMessage(){
         console.log("Reply something");
@@ -134,25 +188,23 @@
     }
 
     function addCheckBox(){
-        let checkbox= document.createElement("input");
-        //checkbox.setAttribute("id",id);
-        checkbox.type="checkbox"
-        //checkbox.class="select-message"
+        let checkbox= document.createElement("input");     
+        checkbox.type="checkbox"       
         checkbox.setAttribute("class","select-message");
         checkbox.setAttribute("onclick","checkfunction()");
         return checkbox;
     }
 
     
-    //
-    const contacts = document.querySelectorAll("button.contact");//.getElementsByTagName("button");
+    
+    const contacts = document.querySelectorAll("button.contact");
     Array.from(contacts).forEach(contact =>
         contact.addEventListener("click", function(contact){
             adresseeName=this.value;
             
             //clear chat space
             clearChat();
-            //let test=GetMessages(userName,adresseeName);
+            
             let url="/Messages?nickNameSender="+userName+"&nickNameAdressee="+adresseeName;
 
             fetch(url, {
@@ -168,18 +220,18 @@
                     elem.appendChild(addCheckBox());
                     elem.appendChild(userNameElem);
                     elem.appendChild(document.createTextNode(data[i].text));
-                    //elem.appendChild(document.createTextNode(data[i].sendTime));
+                    
 
-                    let chatWindow = document.getElementById("chatroom");//.firstChild;
+                    let chatWindow = document.getElementById("chatroom");
 
-                    //firstElem.appendChild(userNameElem);
+                    
                     chatWindow.appendChild(elem);
-                    //document.getElementById("chatroom").insertBefore(elem, firstElem);
+                    
                 }
                 
                 addChat();
 
-                // отправка сообщения на сервер
+                // sending message to server
                 document.getElementById("sendBtn").addEventListener("click", function (e) {
                 let message = document.getElementById("message").value;
             
@@ -198,8 +250,7 @@
                 
                 adresseeName=this.value;
                 
-                let url="/MessagesFromGroups/?groupName="+adresseeName;//group name
-
+                let url="/MessagesFromGroups/?groupName="+adresseeName;
                 clearChat();
 
                 fetch(url, {
@@ -211,69 +262,52 @@
                     userNameElem.appendChild(document.createTextNode(data[i].sender.nickName + ': '));
 
                     let elem = document.createElement("p");
+                    elem.appendChild(addCheckBox());
+                    elem.setAttribute("id",data[i].id);
                     elem.appendChild(userNameElem);
                     elem.appendChild(document.createTextNode(data[i].text));
 
-                    let chatWindow = document.getElementById("chatroom");//.firstChild;
+                    let chatWindow = document.getElementById("chatroom");
 
-                    //firstElem.appendChild(userNameElem);
                     chatWindow.appendChild(elem);
-                    //document.getElementById("chatroom").insertBefore(elem, firstElem);
                     }
 
                     addChat();
 
                     
-                    // отправка сообщения на сервер
+                    // sending message to server
                     document.getElementById("sendBtn").addEventListener("click", function (e) {
                     let message = document.getElementById("message").value;
-            //CHANGE LOGIC HERE
+            
                     hubConnection.invoke("SendToGroups", userName,adresseeName, message);
-            //CHANGE LOGIC HERE
+            
                     //clear input field after sending message
                     let inputField = document.getElementById("message");
                     inputField.value="";
-                    });
-                    
+                    }); 
                 });
-
-
-
-                
+    
             }));
 
-        //const checkBoxes = document.querySelectorAll("input.select-message");
-        //Array.from(checkBoxes).forEach(checkBox =>{
-        //    checkBox.addEventListener("click", function(checkBox){
-        //        if(checkBox.checked==true){
-
-        //        }
-        //    });
-        //});
-
-    // получение сообщения от сервера
-        hubConnection.on('Recieve', function (userName, message) {
+ 
+        //recieving message from server
+        hubConnection.on('Recieve', function (userName, message, id) {
   
-            // создаем элемент <b> для имени пользователя
+            
             let userNameElem = document.createElement("b");
             userNameElem.appendChild(document.createTextNode(userName + ': '));
   
-            
-
-            // создает элемент <p> для сообщения пользователя
             let elem = document.createElement("p");
+            elem.setAttribute("id",id);
+            elem.appendChild(addCheckBox());
             elem.appendChild(userNameElem);
             elem.appendChild(document.createTextNode(message));
-  
-            let form = document.getElementById("inputForm");//.firstChild;
+            
+            let form = document.getElementById("inputForm");
             
             document.getElementById("chatroom").insertBefore(elem, form);
             
         });
-
-
-        
  
-        
         hubConnection.start();
 </script>

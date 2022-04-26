@@ -21,18 +21,60 @@ namespace OnlineChat.Controllers.api
         public ActionResult<IEnumerable<Message>> Get(string nickNameSender, string nickNameAdressee)
         {
             var messagesBySenderToAdressee = _context.Messages.Include(m => m.Sender).
-                Where(m => m.Sender.NickName == nickNameSender && m.AddresseeUser.NickName == nickNameAdressee).//OrderBy(m => m.SendTime).  
-              ToList();//
+                Where(m => m.Sender.NickName == nickNameSender &&
+                m.AddresseeUser.NickName == nickNameAdressee
+                ).
+                ToList();
 
-            var messagesByAdresseeToSender = _context.Messages.Include(m=>m.Sender).//OrderBy(m => m.SendTime).
-                Where(m => m.Sender.NickName == nickNameAdressee && m.AddresseeUser.NickName == nickNameSender).ToList();
+            var messagesByAdresseeToSender = _context.Messages.Include(m=>m.Sender).
+                Where(m => m.Sender.NickName == nickNameAdressee &&
+                m.AddresseeUser.NickName == nickNameSender 
+                ).
+                ToList();
 
             var messages = messagesBySenderToAdressee.Union(messagesByAdresseeToSender).
                 OrderBy(m => m.SendTime.Value.Ticks);
 
             return Ok(messages);
-            //return Ok();
         }
+        [HttpDelete]
+        public ActionResult Delete(int id, bool DeletedForMyself)
+        {  
+            var message = _context.Messages.FirstOrDefault(m => m.Id == id);
+            if (message is null)
+            {
+                return NotFound();
+            }  
+                     
+            if (DeletedForMyself)
+            {
 
+                message.DeletedForMyself = DeletedForMyself;
+                _context.Messages.Update(message);
+                                
+                _context.SaveChanges();
+                return NoContent();
+            }
+           
+            _context.Messages.Remove(message);
+            
+            _context.SaveChanges();
+            return NoContent();
+        }
+        [HttpPut]
+        public ActionResult Put(int id, string newText)
+        {
+            var message = _context.Messages.FirstOrDefault(m=>m.Id==id);
+            if (message is null)
+            {
+                return NotFound();
+            }
+            message.Text = newText;
+
+            _context.Messages.Update(message);
+            _context.SaveChanges();
+
+            return Ok(message);
+        }
     }
 }
